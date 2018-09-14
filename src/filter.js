@@ -1,30 +1,46 @@
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import { inStockSelectionChange, nameFilterChange } from "./actions";
 
-export default class Filter extends React.Component {
-  constructor(props) {
-    super(props);
+const Filter = props => {
+  return (
+    <div>
+      <label>
+        <input
+          type="text"
+          onChange={e => {
+            props.nameFilterChanged(e.target.value);
+          }}
+        />
+        Filter
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          onChange={props.showInStockChanged}
+          checked={props.showInStock}
+        />
+        Show only in stock items
+      </label>
+    </div>
+  );
+};
+
+const mapStateAsProps = state => {
+  return {
+    showInStock: state.showInStock,
+    nameFilter: state.nameFilter
+  };
+};
+
+const mapDispatcherAsProps = dispatch => ({
+  showInStockChanged: () => dispatch(inStockSelectionChange()),
+  nameFilterChanged: name => {
+    dispatch(nameFilterChange(name));
   }
-  render() {
-    return (
-      <div>
-        <label>
-          <input
-            type="text"
-            onChange={event => {
-              this.props.nameFilterChange(event.target.value);
-            }}
-          />
-          Filter
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            onChange={this.props.toggleInStock}
-            checked={this.props.showInStock}
-          />
-          Show only in stock items
-        </label>
-      </div>
-    );
-  }
-}
+});
+
+export default connect(
+  mapStateAsProps,
+  mapDispatcherAsProps
+)(Filter);

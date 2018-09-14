@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-redux";
 
-export default props => {
+const List = props => {
   return (
     <div>
       <ul>
@@ -13,9 +14,19 @@ export default props => {
                 : true
           )
           .map(product => {
-            return <li>{product.name}</li>;
+            return <li key={product.id}>{product.name}</li>;
           })}
       </ul>
     </div>
   );
 };
+
+const mapStateAsProps = state => {
+  return {
+    showInStock: state.showInStock,
+    nameFilter: state.nameFilter,
+    products: state.products
+  };
+};
+
+export default connect(mapStateAsProps)(List);
